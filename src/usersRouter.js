@@ -2,15 +2,9 @@ import express from "express";
 const userRouter = express.Router();
 import { User } from "./models/users.js";
 
-userRouter.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const users = await User.findById(id);
-    res.json(users);
-  } catch (error) {
-    console.log(error);
-    res.status(404).send();
-  }
+userRouter.get("/", async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
 });
 
 userRouter.post("/", async (req, res) => {
@@ -19,6 +13,7 @@ userRouter.post("/", async (req, res) => {
   res.status(201).send(newUser);
 });
 
+/* tentativo con try e catch */
 userRouter.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -28,6 +23,13 @@ userRouter.delete("/:id", async (req, res) => {
     console.log("operation delete is not working because of: " + error);
     res.status(404).send();
   }
+});
+
+userRouter.put("/:id", async (req, res) => {
+  const upUser = await User.findByIdAndUpdate(req.params.id.id, req.body, {
+    new: true,
+  });
+  res.json(upUser);
 });
 
 export default userRouter;
